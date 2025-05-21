@@ -12,6 +12,8 @@ class City extends Model
         'name',
         'country_id',
     ];
+    public $timestamps = false;  
+
     public function country(): BelongsTo
     {
         return $this->belongsTo(Country::class);

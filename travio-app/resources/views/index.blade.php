@@ -40,7 +40,7 @@
     <link rel="stylesheet" href="{{ asset('css/style.css') }}">
 
 
-    <title>Sterial &mdash; Free Bootstrap 5 Website Template by Untree.co </title>
+    <title>Travio | Make travel easy!</title>
 </head>
 
 <body>
@@ -87,15 +87,27 @@
                         </ul>
                     </div>
                     <div class="col-6 col-lg-3 text-lg-end">
-                        <ul class="js-clone-nav d-none d-lg-inline-block text-end site-menu ">
-                            <li class="cta-button"><a href="contact.html">Contact Us</a></li>
-                        </ul>
+                        @auth
+                            <ul class="js-clone-nav d-none d-lg-inline-block text-end site-menu ">
+                                <li class="cta-button"><a href="contact.html">To Profile</a></li>
 
-                        <a href="#"
-                            class="burger ms-auto float-end site-menu-toggle js-menu-toggle d-inline-block d-lg-none light"
-                            data-toggle="collapse" data-target="#main-navbar">
-                            <span></span>
-                        </a>
+                            </ul>
+                            <form action="{{ route('logout') }}" method="POST">
+                                @csrf
+                                <ul class="js-clone-nav d-none d-lg-inline-block text-end site-menu">
+                                    <li class="cta-button"><button type="submit">logout</a></li>
+                                </ul>
+                            @endauth
+                            @guest
+                                <ul class="js-clone-nav d-none d-lg-inline-block text-end site-menu ">
+                                    <li class="cta-button"><a href="{{ route('login') }}">Login</a></li>
+                                </ul>
+                            @endguest
+                            <a href="#"
+                                class="burger ms-auto float-end site-menu-toggle js-menu-toggle d-inline-block d-lg-none light"
+                                data-toggle="collapse" data-target="#main-navbar">
+                                <span></span>
+                            </a>
                     </div>
                 </div>
             </div>
@@ -116,7 +128,8 @@
                 <div class="col-lg-5">
 
                     <h1 class="heading" data-aos="fade-up">It's a Big World Out There, Go Explore</h1>
-                    <p class="mb-5" data-aos="fade-up">A small river named Duden flows by their place and supplies it
+                    <p class="mb-5" data-aos="fade-up">A small river named Duden flows by their place and supplies
+                        it
                         with the necessary regelialia. It is a paradisematic country, in which roasted parts of
                         sentences fly into your mouth.</p>
 

@@ -5,15 +5,15 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
-class Country extends Model
+class Role extends Model
 {
     protected $fillable = [
         'name',
     ];
     public $timestamps = false;  
 
-    public function cities(): HasMany
+    public function users(): HasMany
     {
-        return $this->hasMany(City::class);
+        return $this->hasMany(User::class);
     }
 }

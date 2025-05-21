@@ -11,9 +11,18 @@ class Destination extends Model
     protected $fillable = [
         'description',
         'city_id',
+        'destination_type_id',
     ];
     public function city(): BelongsTo
     {
         return $this->belongsTo(City::class);
+    }
+    public function destinationType(): BelongsTo
+    {
+        return $this->belongsTo(DestinationType::class);
+    }
+    public function places(): HasMany
+    {
+        return $this->hasMany(Place::class);
     }
 }

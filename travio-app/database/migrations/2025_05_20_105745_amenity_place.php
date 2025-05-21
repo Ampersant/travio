@@ -11,22 +11,20 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('destinations', function (Blueprint $table) {
+        Schema::create('amenity_place', function (Blueprint $table) {
             $table->id();
-            $table->text('description');
-            $table->unsignedBigInteger('city_id');
-            $table->unsignedBigInteger('destination_type_id');
+            $table->unsignedBigInteger('place_id');
+            $table->unsignedBigInteger('amenity_id');
 
-            $table->foreign('city_id')
+            $table->foreign('place_id')
                 ->references('id')
-                ->on('cities')
+                ->on('places')
                 ->onDelete('cascade');
 
-            $table->foreign('destination_type_id')
+            $table->foreign('amenity_id')
                 ->references('id')
-                ->on('destination_types')
+                ->on('amenities')
                 ->onDelete('cascade');
-            $table->timestamps();
         });
     }
 
@@ -35,6 +33,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('destinations');
+        Schema::dropIfExists('amenity_place');
     }
 };

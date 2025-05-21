@@ -17,8 +17,9 @@ return new class extends Migration
             $table->string('name')->unique();
             $table->double('price');
             $table->text('description');
+            $table->string('image_url');
             $table->unsignedBigInteger('destination_id');
-            
+            $table->decimal('rating', 2, 1);
             $table->foreign('destination_id')
                   ->references('id')
                   ->on('destinations')

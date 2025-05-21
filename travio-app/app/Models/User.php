@@ -2,17 +2,18 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use SebastianBergmann\CodeUnit\FunctionUnit;
 
-class User extends Authenticatable
+class User extends Authenticatable implements MustVerifyEmail
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
-    use HasFactory, Notifiable, Authenticatable;
+    use HasFactory, Notifiable;
 
     /**
      * The attributes that are mass assignable.
@@ -51,5 +52,9 @@ class User extends Authenticatable
     public function trips(): BelongsToMany
     {
         return $this->belongsToMany(Trip::class);
+    }
+    public function role(): BelongsTo
+    {
+        return $this->belongsTo(Role::class);
     }
 }
