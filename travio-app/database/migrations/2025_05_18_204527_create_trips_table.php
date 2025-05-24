@@ -14,6 +14,8 @@ return new class extends Migration
         Schema::create('trips', function (Blueprint $table) {
             $table->id();
             $table->string('name');
+            $table->unsignedBigInteger('creator_id');
+            $table->enum('status', ['active', 'draft', 'finished']);
             $table->double('sum_price');
             $table->timestamps();
         });

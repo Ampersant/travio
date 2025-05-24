@@ -102,9 +102,29 @@ class PlaceController extends Controller
             'total' => $places->total()
         ]);
     }
-    public function show(int $id): JsonResponse
+    public function show(int $id)
     {
-        $place = Place::findOrFail($id);
+        $place = Place::with([
+            'destination.city.country',
+            'destination.destinationType',
+            'amenities'
+        ])->findOrFail($id);
+        $amenityIcons = [
+            'Swimming Pool'      => 'swimming-pool',
+            'Free WiFi'           => 'wifi',
+            'Breakfast Included' => 'coffee',
+            'Free Parking'       => 'parking',
+            'Spa Service'        => 'spa',
+            'Concierge'          => 'concierge-bell',
+        ];
+        $amenityDescriptions = [
+            'Swimming Pool'      => 'Private infinity pool',
+            'Free WiFi'           => 'High-speed internet',
+            'Breakfast Included' => 'Daily gourmet breakfast',
+            'Free Parking'       => 'Secure private parking',
+            'Spa Service'        => 'On-site massage therapy',
+            'Concierge'          => '24/7 guest services',
+        ];
 
         $data = [
             'id'                => $place->id,
@@ -125,6 +145,7 @@ class PlaceController extends Controller
                 ->all(),
         ];
 
-        return response()->json($data);
+        return view('single-place', compact('place', 'amenityIcons', 'amenityDescriptions'));
     }
+    
 }

@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\DB;
 use SebastianBergmann\CodeUnit\FunctionUnit;
 
 class User extends Authenticatable implements MustVerifyEmail
@@ -56,5 +57,36 @@ class User extends Authenticatable implements MustVerifyEmail
     public function role(): BelongsTo
     {
         return $this->belongsTo(Role::class);
+    }
+    public function sentFriendRequests()
+    {
+        return $this->hasMany(Friendship::class, 'sender_id');
+    }
+    public function receivedFriendRequests()
+    {
+        return $this->hasMany(Friendship::class, 'receiver_id');
+    }
+
+    public function friends()
+    {
+        return $this->belongsToMany(User::class, 'friendships', 'sender_id', 'receiver_id')
+            ->wherePivot('status', 'accepted')
+            ->withTimestamps();
+    }
+        public function acceptedFriends()
+    {
+        return User::whereIn('id', function($q) {
+            $q->selectRaw('receiver_id as id')
+              ->from('friendships')
+              ->where('sender_id', $this->id)
+              ->where('status', Friendship::STATUS_ACCEPTED)
+              ->union(
+                  // also the other direction
+                  DB::table('friendships')
+                    ->selectRaw('sender_id as id')
+                    ->where('receiver_id', $this->id)
+                    ->where('status', Friendship::STATUS_ACCEPTED)
+              );
+        })->get();
     }
 }
