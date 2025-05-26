@@ -6,6 +6,7 @@ use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\DB;
@@ -73,20 +74,31 @@ class User extends Authenticatable implements MustVerifyEmail
             ->wherePivot('status', 'accepted')
             ->withTimestamps();
     }
-        public function acceptedFriends()
+    public function acceptedFriends()
     {
-        return User::whereIn('id', function($q) {
+        return User::whereIn('id', function ($q) {
             $q->selectRaw('receiver_id as id')
-              ->from('friendships')
-              ->where('sender_id', $this->id)
-              ->where('status', Friendship::STATUS_ACCEPTED)
-              ->union(
-                  // also the other direction
-                  DB::table('friendships')
-                    ->selectRaw('sender_id as id')
-                    ->where('receiver_id', $this->id)
-                    ->where('status', Friendship::STATUS_ACCEPTED)
-              );
+                ->from('friendships')
+                ->where('sender_id', $this->id)
+                ->where('status', Friendship::STATUS_ACCEPTED)
+                ->union(
+                    // also the other direction
+                    DB::table('friendships')
+                        ->selectRaw('sender_id as id')
+                        ->where('receiver_id', $this->id)
+                        ->where('status', Friendship::STATUS_ACCEPTED)
+                );
         })->get();
+    }
+
+    public function chats(): BelongsToMany
+    {
+        return $this->belongsToMany(Chat::class)
+            ->withTimestamps();
+    }
+
+    public function messages(): HasMany
+    {
+        return $this->hasMany(Message::class);
     }
 }

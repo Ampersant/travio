@@ -15,7 +15,10 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('place_id');
             $table->unsignedBigInteger('trip_id');
-
+            $table->double('price');
+            $table->date('check_in');
+            $table->date('check_out');
+            
             $table->foreign('place_id')
                 ->references('id')
                 ->on('places')
@@ -26,6 +29,8 @@ return new class extends Migration
                 ->on('trips')
                 ->onDelete('cascade');     
             $table->timestamps();
+
+            
         });
     }
 

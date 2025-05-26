@@ -21,6 +21,10 @@ window.Echo.private(`notifications.${userId}`)
     .listen('FriendRequestResponded', e => {
         console.log('[Echo] FriendRequestRespond payload:', e);
         showResponseToast(e.friendship)
+    })
+    .listen('TripCreated', e =>{
+        console.log(e);
+        showTripNotification(e)
     });
 
 function showIncomingRequestToast(friendship) {
@@ -65,10 +69,15 @@ function showResponseToast(friendship) {
     document.body.append(toast);
     new bootstrap.Toast(toast).show();
 }
+function showTripNotification(tripEvent) {
+    const toast = document.createElement('div');
+    toast.innerHTML = `
+            <div class="toast show position-fixed top-0 end-0 m-3" role="alert" aria-live="assertive" aria-atomic="true">
+                <div class="toast-body">
+                    You were added to ${tripEvent.trip_name}.
+                </div>
+            </div>`;
+    document.body.append(toast);
+    new bootstrap.Toast(toast).show();
+}
 
-// function acceptRequest(requestId) {
-//     axios.post('/api/friends/respond', {
-//         id: requestId,
-//         status: 'accepted'
-//     });
-// }

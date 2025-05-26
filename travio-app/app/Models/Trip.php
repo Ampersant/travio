@@ -9,12 +9,17 @@ class Trip extends Model
 {
     protected $fillable = [
         'name',
+        'creator_id',
+        'status',
         'sum_price',
     ];
+    public const STATUS_ACTIVE  = 'active';
+    public const STATUS_DRAFT = 'draft';
+    public const STATUS_FINISHED = 'finished';
 
     public function places(): BelongsToMany
     {
-        return $this->belongsToMany(Place::class);
+        return $this->belongsToMany(Place::class, 'trip_place', 'trip_id', 'place_id');
     }
     public function users(): BelongsToMany
     {
