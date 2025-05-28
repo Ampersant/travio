@@ -16,6 +16,7 @@ return new class extends Migration
             $table->unsignedBigInteger('place_id');
             $table->unsignedBigInteger('trip_id');
             $table->double('price');
+            $table->json('shares'); // {ivan: x, maria: y}
             $table->date('check_in');
             $table->date('check_out');
             

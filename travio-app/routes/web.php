@@ -3,6 +3,7 @@
 use App\Http\Controllers\ChatController;
 use App\Http\Controllers\FriendshipController;
 use App\Http\Controllers\PlaceController;
+use App\Http\Controllers\PlannerController;
 use App\Http\Controllers\RenderController;
 use App\Http\Controllers\TripController;
 use Illuminate\Support\Facades\Route;
@@ -24,6 +25,9 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/chats/{chat}', [ChatController::class, 'show'])->name('chats.show');
     Route::post('/chats/{chat}/message', [ChatController::class, 'sendMessage'])->name('chats.message.send');
     Route::get('/chats/{chat}/messages', [ChatController::class, 'messages']);
+
+    Route::get('/planner/{tripId}', [PlannerController::class, 'show'])->name('planner.show');
+
 });
 require __DIR__ . '/auth.php';
 require __DIR__ . '/api.php';

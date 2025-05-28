@@ -61,6 +61,7 @@ class TripController extends Controller
                         'check_in'  => $item['check_in'],
                         'check_out' => $item['check_out'],
                         'price'     => $item['price'],
+                        'shares'    => json_encode($shares),
                     ];
                 }
                 $trip->places()->attach($attachData);
