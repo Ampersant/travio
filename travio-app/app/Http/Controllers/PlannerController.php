@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Trip;
 use App\Models\TripPlace;
 use Illuminate\Http\Request;
 
@@ -46,8 +47,12 @@ class PlannerController extends Controller
         $destination->delete();
         return response()->noContent();
     }
+    
     public function show($tripId) 
     {
-        return view('planner');
+        $trip = Trip::with(['places', 'users'])->findOrFail($tripId);
+
+        // dd($trip);
+        return view('planner', compact('trip'));
     }
 }

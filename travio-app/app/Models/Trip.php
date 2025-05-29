@@ -19,7 +19,8 @@ class Trip extends Model
 
     public function places(): BelongsToMany
     {
-        return $this->belongsToMany(Place::class, 'trip_place', 'trip_id', 'place_id');
+        return $this->belongsToMany(Place::class, 'trip_place', 'trip_id', 'place_id')
+                    ->withPivot('price', 'shares', 'check_in', 'check_out');
     }
     public function users(): BelongsToMany
     {

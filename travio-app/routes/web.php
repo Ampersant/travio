@@ -4,6 +4,7 @@ use App\Http\Controllers\ChatController;
 use App\Http\Controllers\FriendshipController;
 use App\Http\Controllers\PlaceController;
 use App\Http\Controllers\PlannerController;
+use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RenderController;
 use App\Http\Controllers\TripController;
 use Illuminate\Support\Facades\Route;
@@ -14,11 +15,13 @@ Route::get('/search', function () {
 })->name('search');
 Route::get('/places/{id}', [PlaceController::class, 'show'])->name('places.show');
 
-Route::get('/trips', [TripController::class, 'index']);
 Route::middleware(['auth'])->group(function () {
     Route::get('/friends', [FriendshipController::class, 'index'])->name('friends.index');
+
+    Route::get('/trips', [TripController::class, 'index'])->name('trips.index');
     Route::post('/trip/confirm', [TripController::class, 'confirm'])->name('trip.confirm');
-    Route::get('/profile',)->name('profile.show');
+
+    Route::get('/profile/{userId}', [ProfileController::class, 'show'])->name('profile.show');
 
     // Chat
     Route::get('/chats', [ChatController::class, 'index'])->name('chats.index');

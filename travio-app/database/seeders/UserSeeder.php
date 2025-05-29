@@ -24,7 +24,7 @@ class UserSeeder extends Seeder
             'role_id' => 1, // assuming 1 is admin
             'provider' => null,
             'provider_id' => null,
-            'avatar' => null,
+            'avatar_url' => 'default.png',
             'remember_token' => Str::random(10),
         ]);
 
@@ -37,7 +37,7 @@ class UserSeeder extends Seeder
             'role_id' => 2, // default role
             'provider' => null,
             'provider_id' => null,
-            'avatar' => null,
+            'avatar_url' => 'default.png',
             'remember_token' => Str::random(10),
         ]);
     }

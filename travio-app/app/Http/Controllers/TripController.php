@@ -33,11 +33,11 @@ class TripController extends Controller
             'participants.*' => 'email|exists:users,email',
         ]);
         try {
-            DB::transaction(function () use ($validated,  $request) {
+            DB::transaction(function () use ($validated, $request) {
                 $user = auth()->user();
 
                 $participantUsers = User::whereIn('email', $validated['participants'])->get();
-                if (! $participantUsers->contains($user)) {
+                if (!$participantUsers->contains($user)) {
                     $participantUsers->push($user);
                 }
                 $participantCount = $participantUsers->count();
@@ -51,24 +51,38 @@ class TripController extends Controller
                 }
 
                 $trip = Trip::create([
-                    'name'        => $request->input('name', 'Trip by ' . $user->name),
-                    'creator_id'  => $user->id,
-                    'status'      => 'active',
-                    'sum_price'   => $sumPrice,
+                    'name' => $request->input('name', 'Trip by ' . $user->name),
+                    'creator_id' => $user->id,
+                    'status' => 'active',
+                    'sum_price' => $sumPrice,
                 ]);
+                $shares = [];
+                $participantCount = $participantUsers->count();
+                // Количество участников
+                $participantCount = count($participantUsers);
+
+                // Массив, который пойдёт в attach()
+// Ключ — это place_id, значение — данные pivot
+                $attachData = [];
+
                 foreach ($validated['items'] as $item) {
+                    $shares = [];
+                    foreach ($participantUsers as $participant) {
+                        $shares[$participant->id] = $item['price'] / $participantCount;
+                    }
                     $attachData[$item['id']] = [
-                        'check_in'  => $item['check_in'],
+                        'check_in' => $item['check_in'],
                         'check_out' => $item['check_out'],
-                        'price'     => $item['price'],
-                        'shares'    => json_encode($shares),
+                        'price' => $item['price'],
+                        'shares' => json_encode($shares),
                     ];
                 }
                 $trip->places()->attach($attachData);
+
                 $trip->users()->attach($participantUsers->pluck('id'));
 
                 $chat = Chat::create([
-                    'name'       => 'Chat for trip ' . $trip->name . '. Trip id:' . $trip->id,
+                    'name' => 'Chat for trip ' . $trip->name . '. Trip id:' . $trip->id,
                     'creator_id' => $user->id,
                 ]);
                 $chat->users()->attach($participantUsers->pluck('id'));
@@ -76,7 +90,7 @@ class TripController extends Controller
                 Message::create([
                     'chat_id' => $chat->id,
                     'user_id' => $user->id,
-                    'body'    => 'Welcome to the trip chat!',
+                    'body' => 'Welcome to the trip chat!',
                 ]);
 
                 event(new TripCreated($trip, $participantUsers));
@@ -86,7 +100,7 @@ class TripController extends Controller
         } catch (\Throwable $e) {
             return response()->json([
                 'message' => 'Error creating trip',
-                'error'   => $e->getMessage(),
+                'error' => $e->getMessage(),
             ], 500);
         }
     }
