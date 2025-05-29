@@ -29,17 +29,23 @@ class TripController extends Controller
             'items.*.price' => 'required|numeric|min:0',
             'items.*.check_in' => 'required|date',
             'items.*.check_out' => 'required|date|after:items.*.check_in',
-            'participants' => 'array',
+            'participants' => 'nullable|array', // Updated validation to make participants optional
             'participants.*' => 'email|exists:users,email',
         ]);
+
         try {
             DB::transaction(function () use ($validated, $request) {
                 $user = auth()->user();
 
-                $participantUsers = User::whereIn('email', $validated['participants'])->get();
+                // Handle participants: Add organizer as sole participant if none are provided
+                $participantUsers = collect();
+                if (!empty($validated['participants'])) {
+                    $participantUsers = User::whereIn('email', $validated['participants'])->get();
+                }
                 if (!$participantUsers->contains($user)) {
                     $participantUsers->push($user);
                 }
+
                 $participantCount = $participantUsers->count();
 
                 $sumPrice = 0;
@@ -56,13 +62,8 @@ class TripController extends Controller
                     'status' => 'active',
                     'sum_price' => $sumPrice,
                 ]);
-                $shares = [];
-                $participantCount = $participantUsers->count();
-                // Количество участников
-                $participantCount = count($participantUsers);
 
-                // Массив, который пойдёт в attach()
-// Ключ — это place_id, значение — данные pivot
+                $shares = [];
                 $attachData = [];
 
                 foreach ($validated['items'] as $item) {
