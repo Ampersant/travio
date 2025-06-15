@@ -23,7 +23,6 @@ Route::middleware(['auth'])->group(function () {
 
     Route::get('/profile/{userId}', [ProfileController::class, 'show'])->name('profile.show');
 
-    // Chat
     Route::get('/chats', [ChatController::class, 'index'])->name('chats.index');
     Route::get('/chats/{chat}', [ChatController::class, 'show'])->name('chats.show');
     Route::post('/chats/{chat}/message', [ChatController::class, 'sendMessage'])->name('chats.message.send');

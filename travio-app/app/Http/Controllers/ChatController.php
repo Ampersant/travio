@@ -41,7 +41,6 @@ class ChatController extends Controller
     }
     public function messages(Chat $chat)
     {
-        // Проверка доступа пользователя опущена для краткости
         $messages = Message::with('user')
             ->where('chat_id', $chat->id)
             ->orderBy('created_at', 'asc')
@@ -69,6 +68,6 @@ class ChatController extends Controller
         broadcast(new MessageSent($message))->toOthers();
 
         return redirect()->route('chats.show', $chat)
-            ->with('success', 'Сообщение отправлено.');
+            ->with('success', 'Message sent.');
     }
 }

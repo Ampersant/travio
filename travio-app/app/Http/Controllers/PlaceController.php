@@ -16,21 +16,18 @@ class PlaceController extends Controller
             'destination.destinationType'
         ]);
 
-        // Фильтр по стране
         if ($request->filled('country')) {
             $query->whereHas('destination.city.country', function ($q) use ($request) {
                 $q->where('countries.id', $request->input('country'));
             });
         }
 
-        // Фильтр по городу
         if ($request->filled('city')) {
             $query->whereHas('destination.city', function ($q) use ($request) {
                 $q->where('cities.id', $request->input('city'));
             });
         }
 
-        // Фильтр по цене
         if ($request->filled('priceMin')) {
             $query->where('places.price', '>=', $request->input('priceMin'));
         }
@@ -39,7 +36,6 @@ class PlaceController extends Controller
             $query->where('places.price', '<=', $request->input('priceMax'));
         }
 
-        // Фильтр по рейтингу
         if ($request->filled('ratings')) {
             $ratings = $request->input('ratings');
             if (!empty($ratings)) {
@@ -47,7 +43,6 @@ class PlaceController extends Controller
             }
         }
 
-        // Фильтр по типу направления
         if ($request->filled('types')) {
             $types = $request->input('types');
             if (!empty($types)) {
@@ -57,7 +52,6 @@ class PlaceController extends Controller
             }
         }
 
-        // Фильтр по удобствам
         if ($request->filled('amenities')) {
             $amenities = $request->input('amenities');
             if (!empty($amenities)) {
@@ -69,11 +63,9 @@ class PlaceController extends Controller
             }
         }
 
-        // Пагинация
         $perPage = 8;
         $places = $query->paginate($perPage);
 
-        // Форматирование ответа
         $data = $places->map(function ($place) {
             return [
                 'id' => $place->id,

@@ -57,7 +57,7 @@ window.rejectRequest = function (requestId) {
 
 function showResponseToast(friendship) {
     const statusText = friendship.status === 'accepted'
-        ? 'accpeted your request'
+        ? 'accepted your request'
         : 'declined your request';
     const toast = document.createElement('div');
     toast.innerHTML = `

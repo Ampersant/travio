@@ -21,7 +21,6 @@ class SocialiteController extends Controller
     {
         $socialUser = Socialite::driver($provider)->user();
 
-        // Поиск или создание пользователя
         $user = User::firstOrCreate(
             ['email' => $socialUser->getEmail()],
             [

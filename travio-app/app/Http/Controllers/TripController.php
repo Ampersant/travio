@@ -9,7 +9,6 @@ use App\Models\Message;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
-// подключаем наше событие
 use App\Events\TripCreated;
 
 class TripController extends Controller
@@ -29,7 +28,7 @@ class TripController extends Controller
             'items.*.price' => 'required|numeric|min:0',
             'items.*.check_in' => 'required|date',
             'items.*.check_out' => 'required|date|after:items.*.check_in',
-            'participants' => 'nullable|array', // Updated validation to make participants optional
+            'participants' => 'nullable|array', 
             'participants.*' => 'email|exists:users,email',
         ]);
 
@@ -37,7 +36,6 @@ class TripController extends Controller
             DB::transaction(function () use ($validated, $request) {
                 $user = auth()->user();
 
-                // Handle participants: Add organizer as sole participant if none are provided
                 $participantUsers = collect();
                 if (!empty($validated['participants'])) {
                     $participantUsers = User::whereIn('email', $validated['participants'])->get();

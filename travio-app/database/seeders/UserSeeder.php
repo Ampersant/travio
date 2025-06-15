@@ -20,11 +20,11 @@ class UserSeeder extends Seeder
             'name' => 'Kevin Admin',
             'email' => 'admin@example.com',
             'email_verified_at' => now(),
-            'password' => Hash::make('password'), // change to a secure password
-            'role_id' => 1, // assuming 1 is admin
+            'password' => Hash::make('password'), 
+            'role_id' => 1, 
             'provider' => null,
             'provider_id' => null,
-            'avatar_url' => 'default.png',
+            'avatar_url' => 'http://127.0.0.1:8000/images/avatars/default.png',
             'remember_token' => Str::random(10),
         ]);
 
@@ -33,11 +33,11 @@ class UserSeeder extends Seeder
             'name' => 'Jhon User',
             'email' => 'user@example.com',
             'email_verified_at' => now(),
-            'password' => Hash::make('password'), // change as needed
-            'role_id' => 2, // default role
+            'password' => Hash::make('password'), 
+            'role_id' => 2, 
             'provider' => null,
             'provider_id' => null,
-            'avatar_url' => 'default.png',
+            'avatar_url' => 'http://127.0.0.1:8000/images/avatars/default.png',
             'remember_token' => Str::random(10),
         ]);
     }

@@ -1,12 +1,9 @@
-
-// Конфигурация
 const config = {
     defaultPriceRange: [0, 5000],
     itemsPerPage: 8,
     visiblePages: 5
 };
 
-// Состояние фильтров
 let state = {
     country: '',
     city: '',
@@ -18,7 +15,6 @@ let state = {
     page: 1
 };
 
-// Инициализация при загрузке
 document.addEventListener('DOMContentLoaded', () => {
     initCountries();
     initPriceSlider();
@@ -26,7 +22,6 @@ document.addEventListener('DOMContentLoaded', () => {
     loadInitialData();
 });
 
-// Основные функции
 function initCountries() {
     fetch('/countries/all')
         .then(res => res.json())
@@ -57,7 +52,6 @@ function initPriceSlider() {
 }
 
 function setupEventListeners() {
-    // Изменение страны
     document.getElementById('country-select').addEventListener('change', e => {
         state.country = e.target.value;
         state.city = '';
@@ -65,13 +59,11 @@ function setupEventListeners() {
         refreshResults();
     });
 
-    // Изменение города
     document.getElementById('city-select').addEventListener('change', e => {
         state.city = e.target.value;
         refreshResults();
     });
 
-    // Применение фильтров
     document.getElementById('apply-filters').addEventListener('click', () => {
         state.ratings = getCheckedValues('rating');
         state.amenities = getCheckedValues('amenity');
@@ -79,7 +71,6 @@ function setupEventListeners() {
         refreshResults();
     });
 
-    // Пагинация
     document.getElementById('pagination').addEventListener('click', e => {
         if (e.target.classList.contains('page-link')) {
             e.preventDefault();
@@ -91,14 +82,12 @@ function setupEventListeners() {
         }
     });
 
-    // Сброс фильтров
     document.getElementById('reset-filters').addEventListener('click', () => {
         resetAllFilters();
         refreshResults();
     });
 }
 
-// Вспомогательные функции
 function addOption(select, value, text) {
     const option = document.createElement('option');
     option.value = value;
@@ -119,7 +108,6 @@ function updatePriceDisplay() {
         state.priceMax >= 5000 ? `$${state.priceMax}+` : `$${state.priceMax}`;
 }
 
-// Работа с городами
 function loadCities(countryId) {
     const citySelect = document.getElementById('city-select');
     citySelect.innerHTML = '<option value="">All Cities</option>';
@@ -131,42 +119,35 @@ function loadCities(countryId) {
         .then(cities => cities.forEach(c => addOption(citySelect, c.id, c.name)));
 }
 
-// Обновление UI
 function updateActiveFilters() {
     const container = document.getElementById('active-filters-container');
     container.innerHTML = '';
 
-    // Ценовой фильтр
     createFilterChip(
         `Price: $${state.priceMin} - $${state.priceMax}`,
         () => resetPriceFilter()
     );
 
-    // Страна
     if (state.country) {
         const name = document.getElementById('country-select').selectedOptions[0].text;
         createFilterChip(`Country: ${name}`, () => resetCountryFilter());
     }
 
-    // Город
     if (state.city) {
         const name = document.getElementById('city-select').selectedOptions[0].text;
         createFilterChip(`City: ${name}`, () => resetCityFilter());
     }
 
-    // Рейтинги
     state.ratings.forEach(r => {
         createFilterChip(`Rating: ${'★'.repeat(r)}`, () => removeRatingFilter(r));
     });
 
-    // Удобства
     state.amenities.forEach(a => {
         const el = document.querySelector(`input[name="amenity"][value="${a}"]`);
         const text = el?.nextElementSibling?.textContent.trim() || `Amenity #${a}`;
         createFilterChip(text, () => removeAmenityFilter(a));
     });
 
-    // Типы
     state.types.forEach(t => {
         const el = document.querySelector(`input[name="type"][value="${t}"]`);
         const text = el?.nextElementSibling?.textContent.trim() || `Type #${t}`;
@@ -222,7 +203,6 @@ function generatePagination(currentPage, lastPage) {
     return html;
 }
 
-// Работа с данными
 function refreshResults() {
     updateActiveFilters();
     updateFilterBadge();
@@ -255,18 +235,15 @@ function refreshResults() {
 function renderResults(places) {
     const container = document.getElementById('search-results');
 
-    // Соответствие ID удобств —> HTML иконки
     const amenityIcons = {
         1: '<i class="fas fa-swimming-pool me-1" title="Swimming Pool"></i>',
         2: '<i class="fas fa-wifi me-1" title="Free WiFi"></i>',
         3: '<i class="fas fa-utensils me-1" title="Breakfast Included"></i>',
         4: '<i class="fas fa-parking me-1" title="Free Parking"></i>',
         5: '<i class="fas fa-spa me-1" title="Spa Services"></i>',
-        // добавьте остальные при необходимости
     };
 
     container.innerHTML = places.map(place => {
-        // Строка с иконками
         const iconsHtml = place.amenities
             .map(a => amenityIcons[a.id] || '')
             .join('');
@@ -296,7 +273,6 @@ function renderResults(places) {
 
 
 
-// Сброс фильтров
 function resetPriceFilter() {
     state.priceMin = config.defaultPriceRange[0];
     state.priceMax = config.defaultPriceRange[1];
@@ -363,7 +339,7 @@ function updateFilterBadge() {
         state.ratings.length,
         state.amenities.length,
         state.types.length,
-        1 // Всегда учитываем ценовой фильтр
+        1
     ].reduce((a, b) => a + b, 0);
 
     const badge = document.getElementById('filter-count');
