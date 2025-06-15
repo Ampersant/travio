@@ -1,0 +1,110 @@
+:root {
+    --primary-color: #2c3e50;
+    --secondary-color: #3498db;
+    --accent-color: #e74c3c;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f8f9fa;
+}
+
+.property-image {
+    height: 100%;
+    width: 100%;
+    object-fit: cover;
+    border-radius: 10px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+}
+
+.price-tag {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background-color: var(--accent-color);
+    color: white;
+    padding: 10px 20px;
+    border-radius: 30px;
+    font-weight: bold;
+    font-size: 1.5rem;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+}
+
+.amenity-icon {
+    font-size: 2rem;
+    color: var(--secondary-color);
+    margin-bottom: 10px;
+}
+
+.destination-badge {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    padding: 8px 15px;
+    border-radius: 30px;
+    font-weight: bold;
+    color: white;
+}
+
+.beach {
+    background-color: #3498db;
+}
+
+.mountain {
+    background-color: #27ae60;
+}
+
+.city {
+    background-color: #9b59b6;
+}
+
+.rating {
+    color: #f1c40f;
+    font-size: 1.5rem;
+}
+
+.booking-card {
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s;
+}
+
+.booking-card:hover {
+    transform: translateY(-5px);
+}
+
+.btn-book {
+    background-color: var(--accent-color);
+    color: white;
+    font-weight: bold;
+    padding: 12px 30px;
+    border-radius: 30px;
+    transition: all 0.3s;
+}
+
+.btn-book:hover {
+    background-color: #c0392b;
+    transform: scale(1.05);
+    color: white;
+}
+
+.section-title {
+    position: relative;
+    margin-bottom: 30px;
+    color: var(--primary-color);
+}
+
+.section-title:after {
+    content: '';
+    position: absolute;
+    bottom: -10px;
+    left: 0;
+    width: 80px;
+    height: 3px;
+    background-color: var(--secondary-color);
+}
+
+.image-container {
+    position: relative;
+    height: 500px;
+}
